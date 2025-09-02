@@ -1,0 +1,503 @@
+## PRACTICE #1 - DEBIAN 12
+
+```bash
+$ podman container run --detach --name=nginx --publish=80:80 --rm docker.io/library/nginx:alpine
+Trying to pull docker.io/library/nginx:alpine...
+Getting image source signatures
+Copying blob 63dda2adf85b done
+Copying blob 3b7062d09e02 done
+Copying blob fe07684b16b8 done
+Copying blob fb746e72516f done
+Copying blob a9ff9baf1741 done
+Copying blob 2c127093dfc7 done
+Copying blob 92971aeb101e done
+Copying blob b55ed7d7b2de done
+Copying config 77656422f7 done
+Writing manifest to image destination
+Storing signatures
+Error: rootlessport cannot expose privileged port 80, you can add 'net.ipv4.ip_unprivileged_port_start=80' to /etc/sysctl.conf (currently 1024), or choose a larger port number (>= 1024): listen tcp 0.0.0.0:80: bind: permission denied
+
+$ podman container run --detach --name=nginx --publish=8080:80 --rm docker.io/library/nginx:alpine
+7f5dee838d4c0a8a28c160690e3fead1c1a10902d529fa89c74109ebd2eee434
+
+$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ podman container kill nginx
+nginx
+
+$ podman container ps --all --noheading
+
+$ podman system prune --all --force
+Deleted Images
+77656422f7009bf47cd4992cb1a118af09c25bb157336478bdbf399af09e8e41
+Total reclaimed space: 53.89MB
+
+```
+
+## PRACTICE #2 - DEBIAN 12
+
+```bash
+$ podman network ls
+NETWORK ID    NAME        DRIVER
+2f259bab93aa  podman      bridge
+
+$ podman network inspect podman
+[
+     {
+          "name": "podman",
+...
+
+$ echo '{
+  "created": "2025-07-05T00:00:00Z",
+  "dns_enabled": false,
+  "driver": "bridge",
+  "id": "2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9",
+  "internal": false,
+  "ipam_options": {
+    "driver": "host-local"
+  },
+  "ipv6_enabled": true,
+  "name": "podman",
+  "network_interface": "podman0",
+  "subnets": [
+    {
+      "gateway": "172.18.0.1",
+      "subnet": "172.18.0.0/24"
+    },
+    {
+      "gateway": "fd5e:822b:4924:c112::1",
+      "subnet": "fd5e:822b:4924:c112::/64"
+    }
+  ]
+}' | tee .local/share/containers/storage/networks/podman.json
+...
+
+$ podman network inspect podman
+[
+     {
+          "name": "podman",
+          "id": "2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9",
+...
+
+```
+
+```bash
+$ podman container run --detach --name=nginx --network=bridge --publish=8080:80 --rm docker.io/library/nginx:alpine
+39ebdc7205792719f0feb787b8208965ae3d50b564f985e402d5ef17c15c3e10
+
+$ podman container ps --all --no-trunc
+CONTAINER ID                                                      IMAGE                           COMMAND               CREATED         STATUS             PORTS                 NAMES
+39ebdc7205792719f0feb787b8208965ae3d50b564f985e402d5ef17c15c3e10  docker.io/library/nginx:alpine  nginx -g daemon off;  11 seconds ago  Up 10 seconds ago  0.0.0.0:8080->80/tcp  nginx
+
+$ podman container inspect nginx --format='{{ .NetworkSettings.IPAddress }}'
+172.18.0.2
+
+$ podman container inspect nginx --format='{{ .NetworkSettings.GlobalIPv6Address }}'
+fd5e:822b:4924:c112::2
+
+$ ss --listening --numeric --no-header --tcp | column --table
+LISTEN  0  128   0.0.0.0:22  0.0.0.0:*
+LISTEN  0  4096  *:8080      *:*
+LISTEN  0  128   [::]:22     [::]:*
+
+$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:00:00:e3 brd ff:ff:ff:ff:ff:ff
+    inet 172.16.0.227/24 brd 172.16.0.255 scope global dynamic enp0s3
+       valid_lft 3317sec preferred_lft 3317sec
+    inet6 fd05:4e60:543f:dcc1:5054:ff:fe00:e3/64 scope global dynamic mngtmpaddr
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:fe00:e3/64 scope link
+       valid_lft forever preferred_lft forever
+4: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
+    link/ether 66:ca:e3:f4:79:d6 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/24 brd 172.17.0.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fd7f:e996:4f39:5d47::1/80 scope global nodad
+       valid_lft forever preferred_lft forever
+
+$ sudo iptables-save
+# Generated by iptables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:08 2025
+*filter
+:INPUT ACCEPT [2351:22693384]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [1147:116539]
+COMMIT
+# Completed on Thu Jul 10 02:21:08 2025
+# Generated by iptables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:08 2025
+*nat
+:PREROUTING ACCEPT [2:668]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [56:3938]
+:POSTROUTING ACCEPT [54:3858]
+-A POSTROUTING -s 172.17.0.0/16 ! -d 172.17.0.0/16 -j MASQUERADE
+COMMIT
+# Completed on Thu Jul 10 02:21:08 2025
+
+$ sudo ip6tables-save
+# Generated by ip6tables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:19 2025
+*filter
+:INPUT ACCEPT [327:36107]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [259:56562]
+COMMIT
+# Completed on Thu Jul 10 02:21:19 2025
+# Generated by ip6tables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:19 2025
+*nat
+:PREROUTING ACCEPT [2:128]
+:INPUT ACCEPT [2:128]
+:OUTPUT ACCEPT [2:160]
+:POSTROUTING ACCEPT [2:160]
+-A POSTROUTING -s fd7f:e996:4f39:5d47::/64 ! -d fd7f:e996:4f39:5d47::/64 -j MASQUERADE
+COMMIT
+# Completed on Thu Jul 10 02:21:19 2025
+
+$ podman unshare --rootless-netns ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: tap0: <BROADCAST,UP,LOWER_UP> mtu 65520 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 46:bb:51:38:ed:a2 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.100/24 brd 10.0.2.255 scope global tap0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::44bb:51ff:fe38:eda2/64 scope link
+       valid_lft forever preferred_lft forever
+3: podman0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 92:27:5d:fc:33:59 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/24 brd 172.18.0.255 scope global podman0
+       valid_lft forever preferred_lft forever
+    inet6 fd5e:822b:4924:c112::1/64 scope global
+       valid_lft forever preferred_lft forever
+    inet6 fe80::980f:ccff:fe38:f2bd/64 scope link
+       valid_lft forever preferred_lft forever
+4: veth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master podman0 state UP group default qlen 1000
+    link/ether 92:27:5d:fc:33:59 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet6 fe80::9027:5dff:fefc:3359/64 scope link
+       valid_lft forever preferred_lft forever
+
+$ podman unshare --rootless-netns /sbin/iptables-save
+# Generated by iptables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:45 2025
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:NETAVARK_FORWARD - [0:0]
+-A FORWARD -m comment --comment "netavark firewall plugin rules" -j NETAVARK_FORWARD
+-A NETAVARK_FORWARD -d 172.18.0.0/24 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A NETAVARK_FORWARD -s 172.18.0.0/24 -j ACCEPT
+COMMIT
+# Completed on Thu Jul 10 02:21:45 2025
+# Generated by iptables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:45 2025
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:NETAVARK-1D8721804F16F - [0:0]
+:NETAVARK-DN-1D8721804F16F - [0:0]
+:NETAVARK-HOSTPORT-DNAT - [0:0]
+:NETAVARK-HOSTPORT-MASQ - [0:0]
+:NETAVARK-HOSTPORT-SETMARK - [0:0]
+-A PREROUTING -m addrtype --dst-type LOCAL -j NETAVARK-HOSTPORT-DNAT
+-A OUTPUT -m addrtype --dst-type LOCAL -j NETAVARK-HOSTPORT-DNAT
+-A POSTROUTING -j NETAVARK-HOSTPORT-MASQ
+-A POSTROUTING -s 172.18.0.0/24 -j NETAVARK-1D8721804F16F
+-A NETAVARK-1D8721804F16F -d 172.18.0.0/24 -j ACCEPT
+-A NETAVARK-1D8721804F16F ! -d 224.0.0.0/4 -j MASQUERADE
+-A NETAVARK-DN-1D8721804F16F -s 172.18.0.0/24 -p tcp -m tcp --dport 8080 -j NETAVARK-HOSTPORT-SETMARK
+-A NETAVARK-DN-1D8721804F16F -s 127.0.0.1/32 -p tcp -m tcp --dport 8080 -j NETAVARK-HOSTPORT-SETMARK
+-A NETAVARK-DN-1D8721804F16F -p tcp -m tcp --dport 8080 -j DNAT --to-destination 172.18.0.2:80
+-A NETAVARK-HOSTPORT-DNAT -p tcp -m tcp --dport 8080 -m comment --comment "dnat name: podman id: 39ebdc7205792719f0feb787b8208965ae3d50b564f985e402d5ef17c15c3e10" -j NETAVARK-DN-1D8721804F16F
+-A NETAVARK-HOSTPORT-MASQ -m comment --comment "netavark portfw masq mark" -m mark --mark 0x2000/0x2000 -j MASQUERADE
+-A NETAVARK-HOSTPORT-SETMARK -j MARK --set-xmark 0x2000/0x2000
+COMMIT
+# Completed on Thu Jul 10 02:21:45 2025
+
+$ podman unshare --rootless-netns /sbin/ip6tables-save
+# Generated by ip6tables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:59 2025
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:NETAVARK_FORWARD - [0:0]
+-A FORWARD -m comment --comment "netavark firewall plugin rules" -j NETAVARK_FORWARD
+-A NETAVARK_FORWARD -d fd5e:822b:4924:c112::/64 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A NETAVARK_FORWARD -s fd5e:822b:4924:c112::/64 -j ACCEPT
+COMMIT
+# Completed on Thu Jul 10 02:21:59 2025
+# Generated by ip6tables-save v1.8.9 (nf_tables) on Thu Jul 10 02:21:59 2025
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:NETAVARK-1D8721804F16F - [0:0]
+:NETAVARK-DN-1D8721804F16F - [0:0]
+:NETAVARK-HOSTPORT-DNAT - [0:0]
+:NETAVARK-HOSTPORT-MASQ - [0:0]
+:NETAVARK-HOSTPORT-SETMARK - [0:0]
+-A PREROUTING -m addrtype --dst-type LOCAL -j NETAVARK-HOSTPORT-DNAT
+-A OUTPUT -m addrtype --dst-type LOCAL -j NETAVARK-HOSTPORT-DNAT
+-A POSTROUTING -j NETAVARK-HOSTPORT-MASQ
+-A POSTROUTING -s fd5e:822b:4924:c112::/64 -j NETAVARK-1D8721804F16F
+-A NETAVARK-1D8721804F16F -d fd5e:822b:4924:c112::/64 -j ACCEPT
+-A NETAVARK-1D8721804F16F ! -d ff00::/8 -j MASQUERADE
+-A NETAVARK-DN-1D8721804F16F -s fd5e:822b:4924:c112::/64 -p tcp -m tcp --dport 8080 -j NETAVARK-HOSTPORT-SETMARK
+-A NETAVARK-DN-1D8721804F16F -s ::1/128 -p tcp -m tcp --dport 8080 -j NETAVARK-HOSTPORT-SETMARK
+-A NETAVARK-DN-1D8721804F16F -p tcp -m tcp --dport 8080 -j DNAT --to-destination [fd5e:822b:4924:c112::2]:80
+-A NETAVARK-HOSTPORT-DNAT -p tcp -m tcp --dport 8080 -m comment --comment "dnat name: podman id: 39ebdc7205792719f0feb787b8208965ae3d50b564f985e402d5ef17c15c3e10" -j NETAVARK-DN-1D8721804F16F
+-A NETAVARK-HOSTPORT-MASQ -m comment --comment "netavark portfw masq mark" -m mark --mark 0x2000/0x2000 -j MASQUERADE
+-A NETAVARK-HOSTPORT-SETMARK -j MARK --set-xmark 0x2000/0x2000
+COMMIT
+# Completed on Thu Jul 10 02:21:59 2025
+
+$ podman container exec nginx netstat -l -n -t
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN
+tcp        0      0 :::80                   :::*                    LISTEN
+
+$ podman container exec nginx curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ podman container exec nginx curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ curl --connect-timeout 5 --fail --show-error --silent http://172.18.0.2
+curl: (28) Failed to connect to 172.18.0.2 port 80 after 5001 ms: Timeout was reached
+
+$ curl --connect-timeout 5 --fail --show-error --silent http://[fd5e:822b:4924:c112::2]
+curl: (28) Failed to connect to fd5e:822b:4924:c112::2 port 80 after 5001 ms: Timeout was reached
+
+$ podman unshare --rootless-netns curl --connect-timeout 5 --fail --show-error --silent http://172.18.0.2
+!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ podman unshare --rootless-netns curl --connect-timeout 5 --fail --show-error --silent http://[fd5e:822b:4924:c112::2]
+!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ podman container kill nginx
+nginx
+
+$ podman container ps --all --noheading
+
+$ podman system prune --all --force
+Deleted Images
+77656422f7009bf47cd4992cb1a118af09c25bb157336478bdbf399af09e8e41
+Total reclaimed space: 53.89MB
+
+```
+
+## PRACTICE #3 - DEBIAN 12
+
+```bash
+$ podman container run --rm docker.io/library/alpine:3.21 ping -c 1 www.google.com
+Trying to pull docker.io/library/alpine:3.21...
+Getting image source signatures
+Copying blob f18232174bc9 done
+Copying config aded1e1a5b done
+Writing manifest to image destination
+Storing signatures
+PING www.google.com (216.58.213.68): 56 data bytes
+
+--- www.google.com ping statistics ---
+1 packets transmitted, 0 packets received, 100% packet loss
+
+$ docker container run --rm docker.io/library/alpine:3.21 ping -c 1 www.google.com
+Unable to find image 'alpine:3.21' locally
+3.21: Pulling from library/alpine
+f18232174bc9: Pull complete
+Digest: sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
+Status: Downloaded newer image for alpine:3.21
+PING www.google.com (216.58.213.68): 56 data bytes
+64 bytes from 216.58.213.68: seq=0 ttl=113 time=6.081 ms
+
+--- www.google.com ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 6.081/6.081/6.081 ms
+
+$ docker system prune --force --all
+Deleted Images:
+untagged: alpine:3.21
+untagged: alpine@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
+deleted: sha256:aded1e1a5b3705116fa0a92ba074a5e0b0031647d9c315983ccba2ee5428ec8b
+deleted: sha256:08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350
+
+Total reclaimed space: 7.834MB
+
+$ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          0         0         0B        0B
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B
+
+$ podman image ls
+REPOSITORY                TAG         IMAGE ID      CREATED       SIZE
+docker.io/library/alpine  3.21        aded1e1a5b37  4 months ago  8.13 MB
+
+$ podman system df
+TYPE           TOTAL       ACTIVE      SIZE        RECLAIMABLE
+Images         1           0           8.133MB     8.133MB (100%)
+Containers     0           0           0B          0B (0%)
+Local Volumes  0           0           0B          0B (0%)
+
+$ sudo sysctl --all | fgrep ping_group_range
+net.ipv4.ping_group_range = 1	0
+
+$ sudo sysctl net.ipv4.ping_group_range='0 2147483647'
+net.ipv4.ping_group_range = 0 2147483647
+
+$ podman container run --rm docker.io/library/alpine:3.21 ping -c 1 www.google.com
+PING www.google.com (216.58.214.164): 56 data bytes
+64 bytes from 216.58.214.164: seq=0 ttl=42 time=7.249 ms
+
+--- www.google.com ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 7.249/7.249/7.249 ms
+
+$ sudo sysctl net.ipv4.ping_group_range='1 0'
+net.ipv4.ping_group_range = 1 0
+
+$ podman system prune --all --force
+Deleted Images
+77656422f7009bf47cd4992cb1a118af09c25bb157336478bdbf399af09e8e41
+Total reclaimed space: 53.89MB
+
+```
+## PRACTICE #4 - DEBIAN 12
+
+```bash
+$ podman container ps --all --quiet
+
+$ podman container run --detach --name=nginx --publish=8080:80 --restart=always docker.io/library/nginx:alpine
+Trying to pull docker.io/library/nginx:alpine...
+Getting image source signatures
+Copying blob 63dda2adf85b done
+Copying blob 3b7062d09e02 done
+Copying blob fb746e72516f done
+Copying blob a9ff9baf1741 done
+Copying blob fe07684b16b8 done
+Copying blob 2c127093dfc7 done
+Copying blob b55ed7d7b2de done
+Copying blob 92971aeb101e done
+Copying config 77656422f7 done
+Writing manifest to image destination
+Storing signatures
+d5cf041ff673ee8a60eaec0aabd60078ef83a0018cef029b5712077052f69223
+
+$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ sudo reboot
+
+```
+
+```bash
+$ podman container ps --all --quiet
+d5cf041ff673
+
+$ podman container inspect --format='{{ .State.Running }}' nginx
+true
+
+$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ podman container kill nginx
+nginx
+
+$ podman container inspect --format='{{ .State.Running }}' nginx
+false
+
+$ sudo reboot
+
+````
+
+```bash
+$ podman container inspect --format='{{ .State.Running }}' nginx
+true
+
+$ podman container kill nginx
+nginx
+
+$ podman container rm nginx
+nginx
+
+$ podman system prune --all --force
+Deleted Images
+77656422f7009bf47cd4992cb1a118af09c25bb157336478bdbf399af09e8e41
+Total reclaimed space: 53.89MB
+
+```
