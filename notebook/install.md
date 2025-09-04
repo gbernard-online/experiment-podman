@@ -136,6 +136,24 @@ host:
       SLIRP_CONFIG_VERSION_MAX: 4
       libseccomp: 2.5.4
 |...|
+store:
+  configFile: /home/user/.config/containers/storage.conf
+  containerStore:
+    number: 0
+    paused: 0
+    running: 0
+    stopped: 0
+  graphDriverName: vfs
+  graphOptions: {}
+  graphRoot: /home/user/.local/share/containers/storage
+  graphRootAllocated: 13775888384
+  graphRootUsed: 6031396864
+  graphStatus: {}
+  imageCopyTmpDir: /var/tmp
+  imageStore:
+    number: 0
+  runRoot: /run/user/1000/containers
+  volumePath: /home/user/.local/share/containers/storage/volumes
 version:
   APIVersion: 4.3.1
   Built: 0
@@ -273,14 +291,14 @@ podman: /usr/bin/podman /usr/lib/podman /usr/libexec/podman /usr/share/man/man1/
 ```
 
 ```bash
-$ systemctl --user enable podman.socket
+$ systemctl --user enable --now podman.socket
 Created symlink '/home/user/.config/systemd/user/sockets.target.wants/podman.socket' →
 '/usr/lib/systemd/user/podman.socket'.
 
 $ systemctl --user is-active podman.socket
 active
 
-$ systemctl --user enable podman-restart.service
+$ systemctl --user enable --now podman-restart.service
 Created symlink '/home/user/.config/systemd/user/default.target.wants/podman-restart.service' →
 '/usr/lib/systemd/user/podman-restart.service'.
 
@@ -288,8 +306,6 @@ $ systemctl --user is-active podman-restart.service
 active
 
 $ sudo loginctl enable-linger user
-
-$ sudo reboot
 ```
 
 ```bash
@@ -338,6 +354,31 @@ host:
     path: /run/user/1000/podman/podman.sock
   rootlessNetworkCmd: pasta
 |...|
+store:
+  configFile: /home/user/.config/containers/storage.conf
+  containerStore:
+    number: 0
+    paused: 0
+    running: 0
+    stopped: 0
+  graphDriverName: overlay
+  graphOptions: {}
+  graphRoot: /home/user/.local/share/containers/storage
+  graphRootAllocated: 13775888384
+  graphRootUsed: 5391732736
+  graphStatus:
+    Backing Filesystem: extfs
+    Native Overlay Diff: "true"
+    Supports d_type: "true"
+    Supports shifting: "false"
+    Supports volatile: "true"
+    Using metacopy: "false"
+  imageCopyTmpDir: /var/tmp
+  imageStore:
+    number: 0
+  runRoot: /run/user/1000/containers
+  transientStore: false
+  volumePath: /home/user/.local/share/containers/storage/volumes
 version:
   APIVersion: 5.4.2
   BuildOrigin: Debian
