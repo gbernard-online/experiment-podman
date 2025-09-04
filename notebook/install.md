@@ -175,7 +175,7 @@ $ podman info --format='{{ .Version.Version }}'
 $ podman container run --quiet --rm quay.io/podman/hello
 !... Hello Podman World ...!
 
-         .--"--.
+         .--❞--.
        ⧸ -     - ⧹
       ⧸ (O)   (O) ⧹
    ~~~| -=(,Y,)=- |
@@ -401,7 +401,7 @@ $ podman info --format='{{ .Version.Version }}'
 $ podman container run --quiet --rm quay.io/podman/hello
 !... Hello Podman World ...!
 
-         .--"--.
+         .--❞--.
        ⧸ -     - ⧹
       ⧸ (O)   (O) ⧹
    ~~~| -=(,Y,)=- |
