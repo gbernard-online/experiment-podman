@@ -27,9 +27,9 @@ podman
   Depends: golang-github-containers-common
  |Depends: crun
   Depends: runc (>= 1.0.0~rc92~)
-  Breaks: buildah (<< 1.10.1-6)
-  Breaks: fuse-overlayfs (<< 0.7.1)
-  Breaks: slirp4netns (<< 0.4.1)
+  Breaks: buildah (≪ 1.10.1-6)
+  Breaks: fuse-overlayfs (≪ 0.7.1)
+  Breaks: slirp4netns (≪ 0.4.1)
   Recommends: buildah (>= 1.28)
   Recommends: dbus-user-session
   Recommends: fuse-overlayfs (>= 1.0.0~)
