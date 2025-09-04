@@ -18,22 +18,22 @@ podman:
 
 $ apt depends podman
 podman
-  Depends: libc6 (>= 2.34)
-  Depends: libdevmapper1.02.1 (>= 2:1.02.97)
-  Depends: libgpgme11 (>= 1.4.1)
-  Depends: libseccomp2 (>= 2.5.0)
-  Depends: libsubid4 (>= 1:4.11.1)
-  Depends: conmon (>= 2.0.18~)
+  Depends: libc6 (≥ 2.34)
+  Depends: libdevmapper1.02.1 (≥ 2:1.02.97)
+  Depends: libgpgme11 (≥ 1.4.1)
+  Depends: libseccomp2 (≥ 2.5.0)
+  Depends: libsubid4 (≥ 1:4.11.1)
+  Depends: conmon (≥ 2.0.18~)
   Depends: golang-github-containers-common
  |Depends: crun
-  Depends: runc (>= 1.0.0~rc92~)
+  Depends: runc (≥ 1.0.0~rc92~)
   Breaks: buildah (≪ 1.10.1-6)
   Breaks: fuse-overlayfs (≪ 0.7.1)
   Breaks: slirp4netns (≪ 0.4.1)
-  Recommends: buildah (>= 1.28)
+  Recommends: buildah (≥ 1.28)
   Recommends: dbus-user-session
-  Recommends: fuse-overlayfs (>= 1.0.0~)
-  Recommends: slirp4netns (>= 0.4.1~)
+  Recommends: fuse-overlayfs (≥ 1.0.0~)
+  Recommends: slirp4netns (≥ 0.4.1~)
  |Recommends: catatonit
  |Recommends: tini
   Recommends: dumb-init
@@ -223,13 +223,13 @@ podman
     containerd.io
   Depends: golang-github-containers-common
   Depends: netavark
-  Depends: init-system-helpers (>= 1.52)
-  Depends: libc6 (>= 2.38)
-  Depends: libgpgme11t64 (>= 1.23.2)
-  Depends: libseccomp2 (>= 2.5.0)
-  Depends: libsqlite3-0 (>= 3.36.0)
-  Depends: libsubid5 (>= 1:4.16.0)
-  Recommends: buildah (>= 1.31)
+  Depends: init-system-helpers (≥ 1.52)
+  Depends: libc6 (≥ 2.38)
+  Depends: libgpgme11t64 (≥ 1.23.2)
+  Depends: libseccomp2 (≥ 2.5.0)
+  Depends: libsqlite3-0 (≥ 3.36.0)
+  Depends: libsubid5 (≥ 1:4.16.0)
+  Recommends: buildah (≥ 1.31)
   Recommends: ca-certificates
  |Recommends: catatonit
  |Recommends: tini
