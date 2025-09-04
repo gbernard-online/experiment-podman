@@ -501,3 +501,11 @@ Deleted Images
 Total reclaimed space: 53.89MB
 
 ```
+
+
+## EXTRA
+
+```
+$ DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock lazydocker
+...
+```
