@@ -179,7 +179,7 @@ $ podman container run --quiet --rm quay.io/podman/hello
        ⧸ -     - ⧹
       ⧸ (O)   (O) ⧹
    ~~~| -=(,Y,)=- |
-    .---. ⧸`  ⧹   |~~
+    .---. ⧸‛  ⧹   |~~
  ~⧸  o  o ⧹~~~~.----. ~~
   | =(X)= |~  ⧸ (O (O) ⧹
    ~~~~~~~  ~| =(Y_)=-  |
@@ -405,7 +405,7 @@ $ podman container run --quiet --rm quay.io/podman/hello
        ⧸ -     - ⧹
       ⧸ (O)   (O) ⧹
    ~~~| -=(,Y,)=- |
-    .---. ⧸`  ⧹   |~~
+    .---. ⧸‛  ⧹   |~~
  ~⧸  o  o ⧹~~~~.----. ~~
   | =(X)= |~  ⧸ (O (O) ⧹
    ~~~~~~~  ~| =(Y_)=-  |
