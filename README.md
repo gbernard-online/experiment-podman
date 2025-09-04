@@ -6,10 +6,14 @@
 
 [Install](notebook/install.md)
 
+[Practice #1](notebook/practice-1.md)  
+[Practice #2](notebook/practice-2.md)
+
 ## REFERENCES
 
 https://podman.io/docs  
-https://www.youtube.com/playlist?list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57
+https://www.youtube.com/playlist?list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57  
+https://github.com/containers/PodmanHello
 
 &nbsp;
 

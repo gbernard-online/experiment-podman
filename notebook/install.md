@@ -92,6 +92,8 @@ active
 $ sudo loginctl enable-linger user
 ```
 
+REF: https://www.youtube.com/watch?v=WnGBO7Jhya4
+
 ```bash
 $ podman --version
 podman version 4.3.1
@@ -170,6 +172,8 @@ amd64
 $ podman info --format='{{ .Version.Version }}'
 4.3.1
 ```
+
+REF: https://github.com/containers/PodmanHello
 
 ```bash
 $ podman container run --quiet --rm quay.io/podman/hello
@@ -308,6 +312,8 @@ active
 $ sudo loginctl enable-linger user
 ```
 
+REF: https://www.youtube.com/watch?v=WnGBO7Jhya4
+
 ```bash
 $ podman --version
 podman version 5.4.2
@@ -396,6 +402,8 @@ amd64
 $ podman info --format='{{ .Version.Version }}'
 5.4.2
 ```
+
+REF: https://github.com/containers/PodmanHello
 
 ```bash
 $ podman container run --quiet --rm quay.io/podman/hello
