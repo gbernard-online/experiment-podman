@@ -26,7 +26,7 @@ https://www.youtube.com/playlist?list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57
 
 `-`
 
-> ![Avatar](ghislain.webp)
+> ![Avatar](ghislain.webp)  
 > Ghislain Bernard
 >
 > [![Gmail](gmail.webp "ghislain.bernard@gmail.com")](mailto:ghislain.bernard@gmail.com)

@@ -8,8 +8,8 @@ https://www.youtube.com/watch?v=pgWLE4Shiak&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8
 
 ## PRACTICE #2 - PODMAN - DEBIAN 13
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)
-[![Debian](img/debian.webp "Debian")](https://debian.org)
+[![Podman](img/podman.webp "Podman")](https://podman.io/)5
+[![Debian](img/debian.webp "Debian")](https://debian.org)13
 
 ```bash
 $ podman network ls

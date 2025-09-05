@@ -9,8 +9,8 @@ https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8
 
 ## INSTALL - PODMAN - DEBIAN 12
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)
-[![Debian](img/debian.webp "Debian")](https://debian.org)
+[![Podman](img/podman.webp "Podman")](https://podman.io/)4
+[![Debian](img/debian.webp "Debian")](https://debian.org)12
 
 ```bash
 $ apt-cache policy podman
@@ -206,8 +206,8 @@ Total reclaimed space: 787kB
 
 ## INSTALL - PODMAN - DEBIAN 13
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)
-[![Debian](img/debian.webp "Debian")](https://debian.org)
+[![Podman](img/podman.webp "Podman")](https://podman.io/)5
+[![Debian](img/debian.webp "Debian")](https://debian.org)13
 
 ```bash
 $ apt policy podman
