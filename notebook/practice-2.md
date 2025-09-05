@@ -63,19 +63,7 @@ $ podman inspect podman | jq .[0].subnets
 ```
 
 ```bash
-$ podman run --detach --name=nginx --network=bridge --publish=8080:80 --rm docker.io/library/nginx:alpine
-Trying to pull docker.io/library/nginx:alpine...
-Getting image source signatures
-Copying blob c9ebe2ff2d2c done   | 
-Copying blob 6bc572a340ec done   | 
-Copying blob 9824c27679d3 done   | 
-Copying blob 9adfbae99cb7 done   | 
-Copying blob 403e3f251637 done   | 
-Copying blob 7a8a46741e18 done   | 
-Copying blob a992fbc61ecc done   | 
-Copying blob cb1ff4086f82 done   | 
-Copying config 4a86014ec6 done   | 
-Writing manifest to image destination
+$ podman run --detach --name=nginx --network=bridge --publish=8080:80 --quiet --rm docker.io/library/nginx:alpine
 509604f10a24c7ee48dbbfd531ccc9133a1316cb5ab3023001cf9213f9dcabda
 
 $ podman ps --all --format='{{.ID}} {{.Ports}}'
