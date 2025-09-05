@@ -11,7 +11,7 @@
 
 ## REFERENCES
 
-https://podman.io/docs  
+https://podman.io  
 https://www.youtube.com/playlist?list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57  
 https://github.com/containers/PodmanHello
 
