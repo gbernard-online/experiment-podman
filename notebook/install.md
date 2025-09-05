@@ -1,11 +1,16 @@
 # EXPERIMENT PODMAN
 
+## REFERENCES
+
+https://podman.io/docs/installation  
+https://github.com/containers/PodmanHello
+
+https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=2
+
 ## INSTALL - PODMAN - DEBIAN 12
 
 [![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)
-
-REF: https://podman.io/docs/installation
 
 ```bash
 $ apt-cache policy podman
@@ -92,8 +97,6 @@ active
 $ sudo loginctl enable-linger user
 ```
 
-REF: https://www.youtube.com/watch?v=WnGBO7Jhya4
-
 ```bash
 $ podman --version
 podman version 4.3.1
@@ -173,8 +176,6 @@ $ podman info --format='{{ .Version.Version }}'
 4.3.1
 ```
 
-REF: https://github.com/containers/PodmanHello
-
 ```bash
 $ podman container run --quiet --rm quay.io/podman/hello
 !... Hello Podman World ...!
@@ -207,8 +208,6 @@ Total reclaimed space: 787kB
 
 [![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)
-
-REF: https://podman.io/docs/installation
 
 ```bash
 $ apt policy podman
@@ -312,8 +311,6 @@ active
 $ sudo loginctl enable-linger user
 ```
 
-REF: https://www.youtube.com/watch?v=WnGBO7Jhya4
-
 ```bash
 $ podman --version
 podman version 5.4.2
@@ -402,8 +399,6 @@ amd64
 $ podman info --format='{{ .Version.Version }}'
 5.4.2
 ```
-
-REF: https://github.com/containers/PodmanHello
 
 ```bash
 $ podman container run --quiet --rm quay.io/podman/hello

@@ -1,14 +1,24 @@
 # EXPERIMENT PODMAN
 
+## REFERENCES
+
+https://docs.podman.io/en/latest/markdown/podman-run.1.html  
+https://docs.podman.io/en/latest/markdown/podman-ps.1.html  
+https://docs.podman.io/en/latest/markdown/podman-inspect.1.html  
+https://docs.podman.io/en/latest/markdown/podman-exec.1.html  
+https://docs.podman.io/en/latest/markdown/podman-kill.1.html  
+https://docs.podman.io/en/latest/markdown/podman-system.1.html
+
+https://www.youtube.com/watch?v=pgWLE4Shiak&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=4  
+https://www.youtube.com/watch?v=rKEKNb_lbEo&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=5
+
 ## PRACTICE #1 - PODMAN - DEBIAN 13
 
 [![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)
 
-REF: https://www.youtube.com/watch?v=pgWLE4Shiak
-
 ```bash
-$ podman container run --detach --name=nginx --publish=80:80 --rm docker.io/library/nginx:alpine
+$ podman run --detach --name=nginx --publish=80:80 --rm docker.io/library/nginx:alpine
 Trying to pull docker.io/library/nginx:alpine...
 Getting image source signatures
 Copying blob c9ebe2ff2d2c done   |
@@ -24,10 +34,10 @@ Writing manifest to image destination
 Error: pasta failed with exit code 1:
 Failed to bind port 80 (Permission denied) for option '-t 80-80:80-80'
 
-$ podman container run --detach --name=nginx --publish=8080:80 --rm docker.io/library/nginx:alpine
+$ podman run --detach --name=nginx --publish=8080:80 --rm docker.io/library/nginx:alpine
 e68003a2747bf6191382fc89504400c510a43b70eccf069ab6384d7ad7e0bba6
 
-$ podman container ps --all --quiet
+$ podman ps --all --quiet
 e68003a2747b
 
 $ podman ps --all --format='{{.ID}} {{.Ports}}'
@@ -46,8 +56,10 @@ $ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:
 <head>
 <title>Welcome to nginx!</title>
 |...|
+```
 
-$ podman container inspect nginx --format='{{ .HostConfig.NetworkMode }}'
+```bash
+$ podman inspect nginx --format='{{ .HostConfig.NetworkMode }}'
 pasta
 
 $ podman exec nginx ls /sys/class/net
@@ -78,9 +90,9 @@ $ ip address show dev enp0s3 scope global
     inet6 fd05:4e60:543f:dcc1:7c4f:15da:c032:ada/64 scope global mngtmpaddr noprefixroute
        valid_lft forever preferred_lft forever
 
-$ podman container inspect nginx --format='{{ .NetworkSettings.IPAddress }}'
+$ podman inspect nginx --format='{{ .NetworkSettings.IPAddress }}'
 
-$ podman container inspect nginx --format='{{ .NetworkSettings.GlobalIPv6Address }}'
+$ podman inspect nginx --format='{{ .NetworkSettings.GlobalIPv6Address }}'
 
 $ pidof pasta
 3841
@@ -104,11 +116,13 @@ none
 /run/user/1000/netns/netns-f275b19a-9a83-6e8e-7fcd-ea94be23984d
 --map-guest-addr
 169.254.1.2
+```
 
-$ podman container kill nginx
+```bash
+$ podman kill nginx
 nginx
 
-$ podman container ps --all --quiet
+$ podman ps --all --quiet
 
 $ podman system prune --all --force
 Deleted Images

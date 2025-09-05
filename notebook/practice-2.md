@@ -1,5 +1,11 @@
 # EXPERIMENT PODMAN
 
+## REFERENCES
+
+https://docs.podman.io/en/latest/markdown/podman-network.1.html
+
+https://www.youtube.com/watch?v=pgWLE4Shiak&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=4
+
 ## PRACTICE #2 - PODMAN - DEBIAN 13
 
 [![Podman](img/podman.webp "Podman")](https://podman.io/)
@@ -10,40 +16,40 @@ $ podman network ls
 NETWORK ID    NAME        DRIVER
 2f259bab93aa  podman      bridge
 
-$ podman network inspect podman | jq .
+$ podman inspect podman | jq --sort-keys .
 [
   {
-    "name": "podman",
-    "id": "2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9",
-    "driver": "bridge",
-    "network_interface": "podman0",
-    "created": "2025-09-04T23:32:38.565607123Z",
-    "subnets": [
-      {
-        "subnet": "10.88.0.0/16",
-        "gateway": "10.88.0.1"
-      }
-    ],
-    "ipv6_enabled": false,
-    "internal": false,
+    "containers": {},
+    "created": "2025-09-05T10:16:01.165850599Z",
     "dns_enabled": false,
+    "driver": "bridge",
+    "id": "2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9",
+    "internal": false,
     "ipam_options": {
       "driver": "host-local"
     },
-    "containers": {}
+    "ipv6_enabled": false,
+    "name": "podman",
+    "network_interface": "podman0",
+    "subnets": [
+      {
+        "gateway": "10.88.0.1",
+        "subnet": "10.88.0.0/16"
+      }
+    ]
   }
 ]
 
-$ podman network inspect podman |
-jq '.[0] | .ipv6_enabled=true' |
+$ podman inspect podman |
+jq --sort-keys '.[0] | .ipv6_enabled=true' |
 jq '.subnets[0]={"gateway":"172.18.0.1","subnet":"172.18.0.0/24"}' |
 jq '.subnets[1]={"gateway":"fd5e:822b:4924:c112::1","subnet":"fd5e:822b:4924:c112::/64"}' |
 sponge .local/share/containers/storage/networks/podman.json
 
-$ podman network inspect podman | jq .[0].ipv6_enabled
+$ podman inspect podman | jq .[0].ipv6_enabled
 true
 
-$ podman network inspect podman | jq .[0].subnets
+$ podman inspect podman | jq .[0].subnets
 [
   {
     "subnet": "172.18.0.0/24",
