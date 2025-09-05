@@ -5,9 +5,115 @@
 [![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)
 
-REF: https://podman.io/docs/installation
+REF: https://www.youtube.com/watch?v=pgWLE4Shiak
 
 ```bash
+$ podman container run --detach --name=nginx --publish=80:80 --rm docker.io/library/nginx:alpine
+Trying to pull docker.io/library/nginx:alpine...
+Getting image source signatures
+Copying blob c9ebe2ff2d2c done   |
+Copying blob 9824c27679d3 done   |
+Copying blob 403e3f251637 done   |
+Copying blob 9adfbae99cb7 done   |
+Copying blob 6bc572a340ec done   |
+Copying blob 7a8a46741e18 done   |
+Copying blob a992fbc61ecc done   |
+Copying blob cb1ff4086f82 done   |
+Copying config 4a86014ec6 done   |
+Writing manifest to image destination
+Error: pasta failed with exit code 1:
+Failed to bind port 80 (Permission denied) for option '-t 80-80:80-80'
+
+$ podman container run --detach --name=nginx --publish=8080:80 --rm docker.io/library/nginx:alpine
+e68003a2747bf6191382fc89504400c510a43b70eccf069ab6384d7ad7e0bba6
+
+$ podman container ps --all --quiet
+e68003a2747b
+
+$ podman ps --all --format='{{.ID}} {{.Ports}}'
+e68003a2747b 0.0.0.0:8080->80/tcp
+
+$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+|...|
+
+$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+|...|
+
+$ podman container inspect nginx --format='{{ .HostConfig.NetworkMode }}'
+pasta
+
+$ podman exec nginx ls /sys/class/net
+enp0s3
+lo
+
+$ podman exec nginx ip address show dev enp0s3 scope global
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 65520 qdisc fq_codel state UNKNOWN qlen 1000
+    link/ether 16:84:f1:a5:0c:6b brd ff:ff:ff:ff:ff:ff
+    inet 172.16.0.227/24 brd 172.16.0.255 scope global noprefixroute enp0s3
+       valid_lft forever preferred_lft forever
+    inet6 fd05:4e60:543f:dcc1:7c4f:15da:c032:ada/64 scope global noprefixroute flags 102
+       valid_lft forever preferred_lft forever
+    inet6 fd05:4e60:543f:dcc1:5054:ff:fe00:e3/64 scope global flags 102
+       valid_lft forever preferred_lft forever
+
+$ ls /sys/class/net
+docker0  enp0s3  lo
+
+$ ip address show dev enp0s3 scope global
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:00:00:e3 brd ff:ff:ff:ff:ff:ff
+    altname enx5254000000e3
+    inet 172.16.0.227/24 brd 172.16.0.255 scope global dynamic noprefixroute enp0s3
+       valid_lft 3409sec preferred_lft 2844sec
+    inet6 fd05:4e60:543f:dcc1:5054:ff:fe00:e3/64 scope global dynamic mngtmpaddr proto kernel_ra
+       valid_lft forever preferred_lft forever
+    inet6 fd05:4e60:543f:dcc1:7c4f:15da:c032:ada/64 scope global mngtmpaddr noprefixroute
+       valid_lft forever preferred_lft forever
+
+$ podman container inspect nginx --format='{{ .NetworkSettings.IPAddress }}'
+
+$ podman container inspect nginx --format='{{ .NetworkSettings.GlobalIPv6Address }}'
+
+$ pidof pasta
+3841
+
+$ cat /proc/3841/cmdline | strings -1
+/usr/bin/pasta
+--config-net
+-t
+8080-8080:80-80
+--dns-forward
+169.254.1.1
+-u
+none
+-T
+none
+-U
+none
+--no-map-gw
+--quiet
+--netns
+/run/user/1000/netns/netns-f275b19a-9a83-6e8e-7fcd-ea94be23984d
+--map-guest-addr
+169.254.1.2
+
+$ podman container kill nginx
+nginx
+
+$ podman container ps --all --quiet
+
+$ podman system prune --all --force
+Deleted Images
+4a86014ec6994761b7f3118cf47e4b4fd6bac15fc6fa262c4f356386bbc0e9d9
+Total reclaimed space: 53.95MB
 ```
 
 &nbsp;
