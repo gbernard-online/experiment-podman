@@ -4,8 +4,8 @@
 
 https://docs.podman.io/en/latest/markdown/podman-run.1.html  
 https://docs.podman.io/en/latest/markdown/podman-ps.1.html  
-https://docs.podman.io/en/latest/markdown/podman-inspect.1.html  
 https://docs.podman.io/en/latest/markdown/podman-exec.1.html  
+https://docs.podman.io/en/latest/markdown/podman-inspect.1.html  
 https://docs.podman.io/en/latest/markdown/podman-kill.1.html  
 https://docs.podman.io/en/latest/markdown/podman-system.1.html
 
@@ -43,14 +43,34 @@ e68003a2747b
 $ podman ps --all --format='{{.ID}} {{.Ports}}'
 e68003a2747b 0.0.0.0:8080->80/tcp
 
-$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent http://localhost:8080
+$ curl --connect-timeout 5 --fail --ipv4 --show-error --silent localhost:8080
 <!DOCTYPE html>
 <html>
 <head>
 <title>Welcome to nginx!</title>
 |...|
 
-$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent http://localhost:8080
+$ curl --connect-timeout 5 --fail --ipv6 --show-error --silent localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+|...|
+
+$ podman exec nginx netstat -l -n -t
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN
+tcp        0      0 :::80                   :::*                    LISTEN
+
+$ podman exec nginx curl --connect-timeout 5 --fail --ipv4 --show-error --silent localhost
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+|...|
+
+$ podman exec nginx curl --connect-timeout 5 --fail --ipv6 --show-error --silent localhost
 <!DOCTYPE html>
 <html>
 <head>
