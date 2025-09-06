@@ -12,7 +12,7 @@ https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8
 
 ## INSTALL - PODMAN - DEBIAN 12
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)4
+[![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)12
 
 ```bash
@@ -162,7 +162,7 @@ $ podman info --format='{{ .Version.Version }}'
 
 ## INSTALL - PODMAN - DEBIAN 13
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)5
+[![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)13
 
 ```bash
@@ -337,9 +337,9 @@ $ podman info --format='{{ .Version.Version }}'
 5.4.2
 ```
 
-## INSTALL - PODMAN
+## INSTALL - PODMAN - DEBIAN 12 & DEBIAN 13
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)4+5
+[![Podman](img/podman.webp "Podman")](https://podman.io/)
 [![Debian](img/debian.webp "Debian")](https://debian.org)12+13
 
 ```bash
