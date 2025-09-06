@@ -2,65 +2,12 @@
 
 ## REFERENCES
 
-https://docs.podman.io/en/latest/markdown/podman-network.1.html
-
 https://www.youtube.com/watch?v=pgWLE4Shiak&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=4
 
 ## PRACTICE #2 - PODMAN - DEBIAN 13
 
 [![Podman](img/podman.webp "Podman")](https://podman.io/)5
 [![Debian](img/debian.webp "Debian")](https://debian.org)13
-
-```bash
-$ podman network ls
-NETWORK ID    NAME        DRIVER
-2f259bab93aa  podman      bridge
-
-$ podman inspect podman | jq --sort-keys .
-[
-  {
-    "containers": {},
-    "created": "2025-09-05T10:16:01.165850599Z",
-    "dns_enabled": false,
-    "driver": "bridge",
-    "id": "2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9",
-    "internal": false,
-    "ipam_options": {
-      "driver": "host-local"
-    },
-    "ipv6_enabled": false,
-    "name": "podman",
-    "network_interface": "podman0",
-    "subnets": [
-      {
-        "gateway": "10.88.0.1",
-        "subnet": "10.88.0.0/16"
-      }
-    ]
-  }
-]
-
-$ podman inspect podman |
-jq --sort-keys '.[0] | .ipv6_enabled=true' |
-jq '.subnets[0]={"gateway":"172.18.0.1","subnet":"172.18.0.0/24"}' |
-jq '.subnets[1]={"gateway":"fd5e:822b:4924:c112::1","subnet":"fd5e:822b:4924:c112::/64"}' |
-sponge .local/share/containers/storage/networks/podman.json
-
-$ podman inspect podman | jq .[0].ipv6_enabled
-true
-
-$ podman inspect podman | jq .[0].subnets
-[
-  {
-    "subnet": "172.18.0.0/24",
-    "gateway": "172.18.0.1"
-  },
-  {
-    "subnet": "fd5e:822b:4924:c112::/64",
-    "gateway": "fd5e:822b:4924:c112::1"
-  }
-]
-```
 
 ```bash
 $ podman run --detach --name=nginx --network=bridge --publish=8080:80 --quiet --rm docker.io/library/nginx:alpine

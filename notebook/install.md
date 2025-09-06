@@ -4,6 +4,9 @@
 
 https://podman.io/docs/installation  
 https://github.com/containers/PodmanHello
+https://docs.podman.io/en/latest/markdown/podman-network.1.html
+https://docs.podman.io/en/latest/markdown/podman-inspect.1.html
+https://simpledns.plus/private-ipv6
 
 https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=2
 
@@ -80,24 +83,6 @@ podman: /usr/bin/podman /usr/lib/podman /usr/share/man/man1/podman.1.gz
 ```
 
 ```bash
-$ systemctl --user enable --now podman.socket
-Created symlink /home/user/.config/systemd/user/sockets.target.wants/podman.socket →
-/usr/lib/systemd/user/podman.socket.
-
-$ systemctl --user is-active podman.socket
-active
-
-$ systemctl --user enable --now podman-restart.service
-Created symlink /home/user/.config/systemd/user/default.target.wants/podman-restart.service →
-/usr/lib/systemd/user/podman-restart.service.
-
-$ systemctl --user is-active podman-restart.service
-active
-
-$ sudo loginctl enable-linger user
-```
-
-```bash
 $ podman --version
 podman version 4.3.1
 
@@ -128,7 +113,6 @@ host:
       +SYSTEMD +SELINUX +APPARMOR +CAP +SECCOMP +EBPF +YAJL
   os: linux
   remoteSocket:
-    exists: true
     path: /run/user/1000/podman/podman.sock
 |...|
   slirp4netns:
@@ -174,34 +158,6 @@ amd64
 
 $ podman info --format='{{ .Version.Version }}'
 4.3.1
-```
-
-```bash
-$ podman container run --quiet --rm quay.io/podman/hello
-!... Hello Podman World ...!
-
-         .--❞--.
-       ⧸ -     - ⧹
-      ⧸ (O)   (O) ⧹
-   ~~~| -=(,Y,)=- |
-    .---. ⧸‛  ⧹   |~~
- ~⧸  o  o ⧹~~~~.----. ~~
-  | =(X)= |~  ⧸ (O (O) ⧹
-   ~~~~~~~  ~| =(Y_)=-  |
-  ~~~~    ~~~|   U      |~~
-
-Project:   https://github.com/containers/podman
-Website:   https://podman.io
-Desktop:   https://podman-desktop.io
-Documents: https://docs.podman.io
-YouTube:   https://youtube.com/@Podman
-X/Twitter: @Podman_io
-Mastodon:  @Podman_io@fosstodon.org
-
-$ podman system prune --all --force
-Deleted Images
-5dd467fce50b56951185da365b5feee75409968cbab5767b9b59e325fb2ecbc0
-Total reclaimed space: 787kB
 ```
 
 ## INSTALL - PODMAN - DEBIAN 13
@@ -294,24 +250,6 @@ podman: /usr/bin/podman /usr/lib/podman /usr/libexec/podman /usr/share/man/man1/
 ```
 
 ```bash
-$ systemctl --user enable --now podman.socket
-Created symlink '/home/user/.config/systemd/user/sockets.target.wants/podman.socket' →
-'/usr/lib/systemd/user/podman.socket'.
-
-$ systemctl --user is-active podman.socket
-active
-
-$ systemctl --user enable --now podman-restart.service
-Created symlink '/home/user/.config/systemd/user/default.target.wants/podman-restart.service' →
-'/usr/lib/systemd/user/podman-restart.service'.
-
-$ systemctl --user is-active podman-restart.service
-active
-
-$ sudo loginctl enable-linger user
-```
-
-```bash
 $ podman --version
 podman version 5.4.2
 
@@ -353,7 +291,6 @@ host:
     package: passt_0.0~git20250503.587980c-2_amd64
     version: ""
   remoteSocket:
-    exists: true
     path: /run/user/1000/podman/podman.sock
   rootlessNetworkCmd: pasta
 |...|
@@ -398,6 +335,29 @@ amd64
 
 $ podman info --format='{{ .Version.Version }}'
 5.4.2
+```
+
+## INSTALL - PODMAN
+
+[![Podman](img/podman.webp "Podman")](https://podman.io/)4+5
+[![Debian](img/debian.webp "Debian")](https://debian.org)12+13
+
+```bash
+$ systemctl --user enable --now podman.socket
+Created symlink '/home/user/.config/systemd/user/sockets.target.wants/podman.socket' →
+'/usr/lib/systemd/user/podman.socket'.
+
+$ systemctl --user is-active podman.socket
+active
+
+$ systemctl --user enable --now podman-restart.service
+Created symlink '/home/user/.config/systemd/user/default.target.wants/podman-restart.service' →
+'/usr/lib/systemd/user/podman-restart.service'.
+
+$ systemctl --user is-active podman-restart.service
+active
+
+$ sudo loginctl enable-linger user
 ```
 
 ```bash
