@@ -340,7 +340,7 @@ $ podman info --format='{{ .Version.Version }}'
 ## INSTALL - PODMAN - DEBIAN 12 & DEBIAN 13
 
 [![Podman](img/podman.webp "Podman")](https://podman.io/)
-[![Debian](img/debian.webp "Debian")](https://debian.org)12+13
+[![Debian](img/debian.webp "Debian")](https://debian.org)12 & 13
 
 ```bash
 $ systemctl --user enable --now podman.socket
