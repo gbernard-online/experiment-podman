@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8
 
 ## PRACTICE #1 - PODMAN 5 - DEBIAN 13
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)5
+[![Podman](img/podman.webp "Podman")](https://podman.io)5
 [![Debian](img/debian.webp "Debian")](https://debian.org)13
 
 ```bash
