@@ -7,7 +7,7 @@ https://docs.podman.io/en/latest/markdown/podman-rm.1.html
 
 ## PRACTICE #3 - PODMAN 5 - DEBIAN 13
 
-[![Podman](img/podman.webp "Podman")](https://podman.io/)5
+[![Podman](img/podman.webp "Podman")](https://podman.io)5
 [![Debian](img/debian.webp "Debian")](https://debian.org)13
 
 ```bash
