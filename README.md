@@ -1,6 +1,6 @@
 # EXPERIMENT PODMAN
 
-[![Podman](podman.webp "Podman")](https://podman.io/)
+[![Podman](podman.webp "Podman")](https://podman.io)
 
 ## TABLE OF CONTENTS
 
