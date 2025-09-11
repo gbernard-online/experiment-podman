@@ -8,7 +8,7 @@ https://docs.podman.io/en/latest/markdown/podman-network.1.html
 https://docs.podman.io/en/latest/markdown/podman-inspect.1.html  
 https://simpledns.plus/private-ipv6
 
-https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=2
+https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57
 
 
 ## INSTALL - PODMAN 5 - DEBIAN 13
