@@ -9,7 +9,7 @@ https://docs.podman.io/en/latest/markdown/podman-inspect.1.html
 https://docs.podman.io/en/latest/markdown/podman-kill.1.html  
 https://docs.podman.io/en/latest/markdown/podman-system.1.html
 
-https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57&index=2
+https://www.youtube.com/watch?v=WnGBO7Jhya4&list=PLn6POgpklwWo_IZ1s2v1Ijf-SnPQY8J57
 
 ## PRACTICE #1 - PODMAN 5 - DEBIAN 13
 
