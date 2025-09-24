@@ -83,8 +83,10 @@ $ podman exec nginx ip address show dev enp0s3 scope global
     inet6 fd05:4e60:543f:dcc1:5054:ff:fe00:e3/64 scope global flags 102
        valid_lft forever preferred_lft forever
 
-$ ls /sys/class/net
-docker0  enp0s3  lo
+$ ls --width=1 /sys/class/net
+docker0
+enp0s3
+lo
 
 $ ip address show dev enp0s3 scope global
 2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
