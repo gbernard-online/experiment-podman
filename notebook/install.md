@@ -227,11 +227,6 @@ Created symlink '/home/user/.config/systemd/user/default.target.wants/podman-res
 
 $ systemctl --user is-active podman-restart.service
 active
-
-$ sudo loginctl enable-linger user
-
-$ sudo loginctl show-user user | fgrep Linger
-Linger=yes
 ```
 
 ```bash
