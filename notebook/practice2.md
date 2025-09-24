@@ -77,8 +77,7 @@ $ ip address show scope global
     inet6 fd7f:e996:4f39:5d47::1/80 scope global nodad 
        valid_lft forever preferred_lft forever
 
-$ podman unshare --rootless-netns \
-ip address show scope global
+$ podman unshare --rootless-netns ip address show scope global
 2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 65520 qdisc fq_codel state UNKNOWN group default qlen 1000
     link/ether 72:d3:f7:26:0c:21 brd ff:ff:ff:ff:ff:ff
     inet 172.16.0.227/24 brd 172.16.0.255 scope global noprefixroute enp0s3
@@ -110,18 +109,14 @@ curl --connect-timeout 5 --fail --show-error --silent [fd5e:822b:4924:c112::2]
 <title>Welcome to nginx!</title>
 |...|
 
-$ podman unshare --rootless-netns \
-/sbin/iptables-save
+$ podman unshare --rootless-netns /sbin/iptables-save
 
-$ podman unshare --rootless-netns \
-/sbin/ip6tables-save
+$ podman unshare --rootless-netns /sbin/ip6tables-save
 
-$ podman unshare --rootless-netns \
-/sbin/nft list tables
+$ podman unshare --rootless-netns /sbin/nft list tables
 table inet netavark
 
-$ podman unshare --rootless-netns \
-/sbin/nft list table inet netavark | expand --tabs=2
+$ podman unshare --rootless-netns /sbin/nft list table inet netavark | expand --tabs=2
 table inet netavark {
   chain INPUT {
     type filter hook input priority filter; policy accept;
