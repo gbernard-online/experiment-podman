@@ -103,7 +103,7 @@ curl --connect-timeout 5 --fail --show-error --silent 172.18.0.2
 |...|
 
 $ podman unshare --rootless-netns \
-curl --connect-timeout 5 --fail --show-error --silent \[fd5e:822b:4924:c112::2]
+curl --connect-timeout 5 --fail --show-error --silent [fd5e:822b:4924:c112::2]
 !DOCTYPE html>
 <html>
 <head>
@@ -121,81 +121,81 @@ $ podman unshare --rootless-netns \
 table inet netavark
 
 $ podman unshare --rootless-netns \
-/sbin/nft list table inet netavark
+/sbin/nft list table inet netavark | expand --tabs=2
 table inet netavark {
-        chain INPUT {
-                type filter hook input priority filter; policy accept;
-                ip saddr 172.18.0.0/24 meta l4proto { tcp, udp } th dport 53 accept
-                ip6 saddr fd5e:822b:4924:c112::/64 meta l4proto { tcp, udp } th dport 53 accept
-        }
+  chain INPUT {
+    type filter hook input priority filter; policy accept;
+    ip saddr 172.18.0.0/24 meta l4proto { tcp, udp } th dport 53 accept
+    ip6 saddr fd5e:822b:4924:c112::/64 meta l4proto { tcp, udp } th dport 53 accept
+  }
 
-        chain FORWARD {
-                type filter hook forward priority filter; policy accept;
-                ct state invalid drop
-                jump NETAVARK-ISOLATION-1
-                ip daddr 172.18.0.0/24 ct state established,related accept
-                ip saddr 172.18.0.0/24 accept
-                ip6 daddr fd5e:822b:4924:c112::/64 ct state established,related accept
-                ip6 saddr fd5e:822b:4924:c112::/64 accept
-        }
+  chain FORWARD {
+    type filter hook forward priority filter; policy accept;
+    ct state invalid drop
+    jump NETAVARK-ISOLATION-1
+    ip daddr 172.18.0.0/24 ct state established,related accept
+    ip saddr 172.18.0.0/24 accept
+    ip6 daddr fd5e:822b:4924:c112::/64 ct state established,related accept
+    ip6 saddr fd5e:822b:4924:c112::/64 accept
+  }
 
-        chain POSTROUTING {
-                type nat hook postrouting priority srcnat; policy accept;
-                meta mark & 0x00002000 == 0x00002000 masquerade
-                ip saddr 172.18.0.0/24 jump nv_2f259bab_172_18_0_0_nm24
-                ip6 saddr fd5e:822b:4924:c112::/64 jump nv_2f259bab_fd5e-822b-4924-c112--_nm64
-        }
+  chain POSTROUTING {
+    type nat hook postrouting priority srcnat; policy accept;
+    meta mark & 0x00002000 == 0x00002000 masquerade
+    ip saddr 172.18.0.0/24 jump nv_2f259bab_172_18_0_0_nm24
+    ip6 saddr fd5e:822b:4924:c112::/64 jump nv_2f259bab_fd5e-822b-4924-c112--_nm64
+  }
 
-        chain PREROUTING {
-                type nat hook prerouting priority dstnat; policy accept;
-                fib daddr type local jump NETAVARK-HOSTPORT-DNAT
-        }
+  chain PREROUTING {
+    type nat hook prerouting priority dstnat; policy accept;
+    fib daddr type local jump NETAVARK-HOSTPORT-DNAT
+  }
 
-        chain OUTPUT {
-                type nat hook output priority dstnat; policy accept;
-                fib daddr type local jump NETAVARK-HOSTPORT-DNAT
-        }
+  chain OUTPUT {
+    type nat hook output priority dstnat; policy accept;
+    fib daddr type local jump NETAVARK-HOSTPORT-DNAT
+  }
 
-        chain NETAVARK-HOSTPORT-DNAT {
-                tcp dport 8080 jump nv_2f259bab_172_18_0_0_nm24_dnat
-                tcp dport 8080 jump nv_2f259bab_fd5e-822b-4924-c112--_nm64_dnat
-        }
+  chain NETAVARK-HOSTPORT-DNAT {
+    tcp dport 8080 jump nv_2f259bab_172_18_0_0_nm24_dnat
+    tcp dport 8080 jump nv_2f259bab_fd5e-822b-4924-c112--_nm64_dnat
+  }
 
-        chain NETAVARK-HOSTPORT-SETMARK {
-                meta mark set meta mark | 0x00002000
-        }
+  chain NETAVARK-HOSTPORT-SETMARK {
+    meta mark set meta mark | 0x00002000
+  }
 
-        chain NETAVARK-ISOLATION-1 {
-        }
+  chain NETAVARK-ISOLATION-1 {
+  }
 
-        chain NETAVARK-ISOLATION-2 {
-        }
+  chain NETAVARK-ISOLATION-2 {
+  }
 
-        chain NETAVARK-ISOLATION-3 {
-                oifname "podman0" drop
-                jump NETAVARK-ISOLATION-2
-        }
+  chain NETAVARK-ISOLATION-3 {
+    oifname "podman0" drop
+    jump NETAVARK-ISOLATION-2
+  }
 
-        chain nv_2f259bab_172_18_0_0_nm24 {
-                ip daddr 172.18.0.0/24 accept
-                ip daddr != 224.0.0.0/4 masquerade
-        }
+  chain nv_2f259bab_172_18_0_0_nm24 {
+    ip daddr 172.18.0.0/24 accept
+    ip daddr != 224.0.0.0/4 masquerade
+  }
 
-        chain nv_2f259bab_fd5e-822b-4924-c112--_nm64 {
-                ip6 daddr fd5e:822b:4924:c112::/64 accept
-                ip6 daddr != ::/8 masquerade
-        }
+  chain nv_2f259bab_fd5e-822b-4924-c112--_nm64 {
+    ip6 daddr fd5e:822b:4924:c112::/64 accept
+    ip6 daddr != ::/8 masquerade
+  }
 
-        chain nv_2f259bab_172_18_0_0_nm24_dnat {
-                ip saddr 172.18.0.0/24 tcp dport 8080 jump NETAVARK-HOSTPORT-SETMARK
-                ip saddr 127.0.0.1 tcp dport 8080 jump NETAVARK-HOSTPORT-SETMARK
-                tcp dport 8080 dnat ip to 172.18.0.2:80
-        }
+  chain nv_2f259bab_172_18_0_0_nm24_dnat {
+    ip saddr 172.18.0.0/24 tcp dport 8080 jump NETAVARK-HOSTPORT-SETMARK
+    ip saddr 127.0.0.1 tcp dport 8080 jump NETAVARK-HOSTPORT-SETMARK
+    tcp dport 8080 dnat ip to 172.18.0.2:80
+  }
 
-        chain nv_2f259bab_fd5e-822b-4924-c112--_nm64_dnat {
-                ip6 saddr fd5e:822b:4924:c112::/64 tcp dport 8080 jump NETAVARK-HOSTPORT-SETMARK
-                tcp dport 8080 dnat ip6 to [fd5e:822b:4924:c112::2]:80
-        }
+  chain nv_2f259bab_fd5e-822b-4924-c112--_nm64_dnat {
+    ip6 saddr fd5e:822b:4924:c112::/64 tcp dport 8080 jump NETAVARK-HOSTPORT-SETMARK
+    tcp dport 8080 dnat ip6 to [fd5e:822b:4924:c112::2]:80
+  }
 }
 ```
 
