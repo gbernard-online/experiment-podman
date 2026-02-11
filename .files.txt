@@ -1,5 +1,7 @@
 .editorconfig
+.files.txt
 .prettierrc
+README.md
 notebook/img/debian.webp
 notebook/img/github.webp
 notebook/img/linkedin.webp
@@ -9,5 +11,3 @@ notebook/practice1.md
 notebook/practice2.md
 notebook/practice3.md
 podman.webp
-.files.txt
-README.md
